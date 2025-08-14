@@ -1,17 +1,22 @@
 package com.fantasize_anything.app.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "activity")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Activity {
 
     @Id
@@ -35,10 +40,18 @@ public class Activity {
     private List<Player> players;
 
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ScoringSystem> scoringSystems;
+    private List<ScoringRule> scoringRules;
 
     @PrePersist
     public void prePersist(){
         dateCreated = LocalDate.now();
+    }
+
+    public void addScoringRule(ScoringRule rule){
+        if(scoringRules == null){
+            scoringRules = new ArrayList<>();
+        }
+        rule.setActivity(this);
+        scoringRules.add(rule);
     }
 }
