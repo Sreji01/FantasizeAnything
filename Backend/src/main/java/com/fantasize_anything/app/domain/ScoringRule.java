@@ -2,12 +2,14 @@ package com.fantasize_anything.app.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "scoring_system")
 @Getter
 @Setter
+@NoArgsConstructor
 public class ScoringRule {
 
     @Id
