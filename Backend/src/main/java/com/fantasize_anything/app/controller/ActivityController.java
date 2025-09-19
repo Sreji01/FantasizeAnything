@@ -1,4 +1,4 @@
-package com.fantasize_anything.app;
+package com.fantasize_anything.app.controller;
 
 import com.fantasize_anything.app.domain.Activity;
 import com.fantasize_anything.app.dto.ActivityInput;
