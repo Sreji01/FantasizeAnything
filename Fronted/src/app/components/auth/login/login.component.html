@@ -1,0 +1,35 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="container mt-5" style="max-width: 400px">
+  <h3 class="mb-4 text-center">Login</h3>
+
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" formControlName="email" id="email" class="form-control" placeholder="Enter your email">
+    <div *ngIf="loginForm.get('email')?.errors?.['required'] && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)" class="text-danger mt-1">
+      Email is required.
+    </div>
+    <div *ngIf="loginForm.get('email')?.errors?.['email'] && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)" class="text-danger mt-1">
+      Please enter a valid email.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" formControlName="password" id="password" class="form-control" placeholder="Enter your password">
+    <div *ngIf="loginForm.get('password')?.errors?.['required'] && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)" class="text-danger mt-1">
+      Password is required.
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">Login</button>
+
+  <div *ngIf="successMessage" class="alert alert-success mt-3">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <div class="text-center mt-3">
+    <a routerLink="/register">Don't have an account? Register</a>
+  </div>
+</form>
