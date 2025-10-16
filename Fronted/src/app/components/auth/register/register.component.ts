@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../../services/auth.service";
-import {User} from "../../../common/user";
 import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
 
@@ -24,15 +23,16 @@ export class RegisterComponent {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: ['', [Validators.required,]]
     });
   }
 
   onSubmit() {
+    console.log('onSubmit called!');
+    console.log('Form value:', this.registerForm.value);
+    console.log('Form valid:', this.registerForm.valid);
     if (this.registerForm.valid) {
-      const user: User = this.registerForm.value;
-
-      this.authService.register(user).subscribe({
+      this.authService.register(this.registerForm.value).subscribe({
         next: (res) => {
           this.successMessage = 'Registration successful! Redirecting to login...';
           this.errorMessage = '';

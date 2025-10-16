@@ -1,8 +1,11 @@
 package com.fantasize_anything.app.service;
 
 import com.fantasize_anything.app.domain.User;
-import com.fantasize_anything.app.dto.UserDTO;
+import com.fantasize_anything.app.dto.LoginDTO;
+import com.fantasize_anything.app.dto.UserResponseDTO;
+import com.fantasize_anything.app.dto.RegisterDTO;
 import com.fantasize_anything.app.repository.UserRepository;
+import com.fantasize_anything.app.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +14,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
-    public User registerUser(UserDTO dto) {
+    public UserResponseDTO registerUser(RegisterDTO dto) {
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new RuntimeException("Email already in use");
         }
@@ -30,6 +35,20 @@ public class UserService {
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return new UserResponseDTO(null, user.getUsername(), user.getEmail());
+    }
+
+    public UserResponseDTO loginUser(LoginDTO dto) {
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid email"));
+
+        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())){
+            throw new RuntimeException("Invalid password");
+        }
+        String token = jwtService.generateToken(user.getUsername());
+
+        return new UserResponseDTO(token, user.getUsername(), user.getEmail());
     }
 }

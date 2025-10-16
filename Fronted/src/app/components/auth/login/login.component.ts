@@ -33,15 +33,12 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    /*if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-
-      this.authService.login(email, password).subscribe({
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value).subscribe({
         next: (res) => {
           this.successMessage = 'Login successful! Redirecting...';
           this.errorMessage = '';
-          // Prebaci na dashboard ili home nakon uspešnog login-a
-          setTimeout(() => this.router.navigate(['/dashboard']), 1500);
+          setTimeout(() => this.router.navigate(['/home']), 1500);
         },
         error: (err) => {
           this.errorMessage = 'Invalid email or password.';
@@ -49,6 +46,6 @@ export class LoginComponent {
           console.error('Login failed', err);
         }
       });
-    }*/
+    }
   }
 }

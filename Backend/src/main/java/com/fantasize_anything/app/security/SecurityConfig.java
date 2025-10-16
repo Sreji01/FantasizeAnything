@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
-                .anonymous(anonymous -> anonymous.disable())  // Dodaj ovo
+                .anonymous(anonymous -> anonymous.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable())
                 .logout(logout -> logout.disable());
