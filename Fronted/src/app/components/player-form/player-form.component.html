@@ -1,0 +1,103 @@
+<div [formGroup]="playerForm"
+     style="background: #f9fafb; border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+
+  <h4 style="margin-bottom: 12px;">
+    {{ initialData ? 'Edit Player' : 'New Player' }}
+  </h4>
+
+  <div class="form-group" style="margin-bottom: 8px;">
+    <label>First Name *</label>
+    <input type="text" formControlName="firstName" placeholder="Enter player name"
+           style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+  </div>
+
+  <div class="form-group" style="margin-bottom: 8px;">
+    <label>Last Name *</label>
+    <input type="text" formControlName="lastName" placeholder="Enter player last name"
+           style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+  </div>
+
+  <div class="form-group" style="margin-bottom: 8px;">
+    <label>Price</label>
+    <input type="number" formControlName="price" placeholder="Enter player price"
+           style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+  </div>
+
+  <div formArrayName="characteristics" style="margin-bottom: 12px;">
+    <label style="display: block; margin-bottom: 8px;">Characteristics:</label>
+
+    <ng-container *ngFor="let char of characteristics.controls; let i = index">
+      <div [formGroupName]="i" *ngIf="editIndex !== i"
+           style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+        <input type="text" formControlName="name" readonly
+               style="flex: 1; padding: 6px; border-radius: 6px; border: 1px solid #ccc; background: #f3f4f6;">
+        <input type="text" formControlName="value" readonly
+               style="width: 120px; padding: 6px; border-radius: 6px; border: 1px solid #ccc; background: #f3f4f6; text-align: center;">
+
+        <button type="button"
+                (click)="editCharacteristic(i)"
+                style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
+          ✎
+        </button>
+
+        <button type="button"
+                (click)="removeCharacteristic(i)"
+                style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
+          ✕
+        </button>
+      </div>
+    </ng-container>
+
+    <div *ngIf="showCharacteristicInputs"
+         style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+      <input type="text"
+             [(ngModel)]="tempCharacteristic.name"
+             [ngModelOptions]="{standalone: true}"
+             placeholder="Characteristic name"
+             style="flex: 1; padding: 6px; border-radius: 6px; border: 1px solid #ccc;">
+      <input type="text"
+             [(ngModel)]="tempCharacteristic.value"
+             [ngModelOptions]="{standalone: true}"
+             placeholder="Value"
+             style="width: 120px; padding: 6px; border-radius: 6px; border: 1px solid #ccc; text-align: center;">
+      <button type="button"
+              (click)="confirmAddOrEditCharacteristic()"
+              style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
+        {{ editIndex !== null ? 'Save' : 'Add' }}
+      </button>
+      <button type="button"
+              (click)="cancelCharacteristicInput()"
+              style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
+        ✕
+      </button>
+    </div>
+
+    <button *ngIf="!showCharacteristicInputs"
+            type="button"
+            (click)="toggleCharacteristicInput()"
+            style="display: block; margin-top: 8px; padding: 6px 12px; background-color: #4f46e5; color: white; border: none; border-radius: 6px; cursor: pointer;">
+      + Add Characteristic
+    </button>
+  </div>
+
+  <div class="form-group" style="margin-bottom: 8px;">
+    <label>Player Image</label>
+    <input type="file" (change)="onFileSelected($event)" accept="image/*"
+           style="width: 100%; padding: 6px; border-radius: 6px; border: 1px solid #ccc;">
+  </div>
+
+  <div style="display: flex; justify-content: space-between; margin-top: 12px;">
+    <button type="button"
+            (click)="onSubmit()"
+            [disabled]="playerForm.invalid"
+            style="padding: 8px 16px; background-color: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer;">
+      {{ initialData ? 'Save Changes' : 'Add Player' }}
+    </button>
+
+    <button type="button"
+            (click)="cancel.emit()"
+            style="padding: 8px 16px; background-color: #f87171; color: white; border: none; border-radius: 6px; cursor: pointer;">
+      Cancel
+    </button>
+  </div>
+</div>
