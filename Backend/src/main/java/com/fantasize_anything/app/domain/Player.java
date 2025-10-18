@@ -31,6 +31,6 @@ public class Player {
     private byte[] image;
 
     @ManyToOne
-    @JoinColumn(name = "activity_id")
-    private Activity activity;
+    @JoinColumn(name = "fantasy_game_id")
+    private FantasyGame fantasyGame;
 }

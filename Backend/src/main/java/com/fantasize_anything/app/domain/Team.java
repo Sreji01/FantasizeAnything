@@ -20,8 +20,8 @@ public class Team {
     private BigDecimal remainingBudget;
 
     @ManyToOne
-    @JoinColumn(name = "competition_id")
-    private Competition competition;
+    @JoinColumn(name = "league_id")
+    private League league;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

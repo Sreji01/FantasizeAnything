@@ -8,10 +8,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "competition")
+@Table(name = "league")
 @Getter
 @Setter
-public class Competition {
+public class League {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +23,14 @@ public class Competition {
     private LocalDate dateCreated;
 
     @ManyToOne
-    @JoinColumn(name = "activity_id")
-    private Activity activity;
+    @JoinColumn(name = "fantasy_game_id")
+    private FantasyGame fantasyGame;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User creator;
 
-    @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Team> teams;
 
     @PrePersist

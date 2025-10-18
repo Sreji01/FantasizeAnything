@@ -21,6 +21,6 @@ public class ScoringRule {
     private int numberOfPoints;
 
     @ManyToOne
-    @JoinColumn(name = "activity_id")
-    private Activity activity;
+    @JoinColumn(name = "fantasy_game_id")
+    private FantasyGame fantasyGame;
 }

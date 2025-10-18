@@ -12,18 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "activity")
+@Table(name = "fantasy_game")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Activity {
+public class FantasyGame {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String title;
     private String description;
     private LocalDate dateCreated;
     private BigDecimal budget;
@@ -33,13 +33,13 @@ public class Activity {
     @JoinColumn(name = "user_id")
     private User creator;
 
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Competition> competitions;
+    @OneToMany(mappedBy = "fantasyGame", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<League> leagues;
 
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fantasyGame", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Player> players;
 
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fantasyGame", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ScoringRule> scoringRules;
 
     @PrePersist
@@ -51,7 +51,7 @@ public class Activity {
         if(scoringRules == null){
             scoringRules = new ArrayList<>();
         }
-        rule.setActivity(this);
+        rule.setFantasyGame(this);
         scoringRules.add(rule);
     }
 }

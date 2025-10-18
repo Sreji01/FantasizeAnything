@@ -21,10 +21,10 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Activity> activities;
+    private List<FantasyGame> fantasyGames;
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Competition> competitions;
+    private List<League> leagues;
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Team> teams;
