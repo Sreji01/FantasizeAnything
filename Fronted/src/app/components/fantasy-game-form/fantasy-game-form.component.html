@@ -1,0 +1,138 @@
+<div class="fantasy-form-container"
+     style="max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; border-radius: 12px; background: #fff;">
+  <h2>Create a Fantasy Game</h2>
+
+  <form [formGroup]="fantasyForm" (ngSubmit)="onSubmit()">
+
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label for="title">Title *</label>
+      <input type="text" id="title" formControlName="title" placeholder="Enter game title" required
+             style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+      <div *ngIf="fantasyForm.get('title')?.invalid && fantasyForm.get('title')?.touched"
+           style="color:red; font-size: 12px;">Title is required</div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label for="description">Description *</label>
+      <textarea id="description" formControlName="description" placeholder="Enter game description" required rows="4"
+                style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+      <div *ngIf="fantasyForm.get('description')?.invalid && fantasyForm.get('description')?.touched"
+           style="color:red; font-size: 12px;">Description is required</div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label for="budget">Budget</label>
+      <input type="number" id="budget" formControlName="budget" placeholder="Enter budget amount" min="0"
+             style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+    </div>
+
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label for="numberOfPlayersPerTeam">Number of Players per Team</label>
+      <input type="number" id="numberOfPlayersPerTeam" formControlName="numberOfPlayersPerTeam"
+             placeholder="Enter number of players per team" min="1"
+             style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+    </div>
+
+    <div formArrayName="scoringRules" style="margin-bottom: 24px;">
+      <label>Scoring Rules:</label>
+
+      <ng-container *ngFor="let rule of scoringRules.controls; let i = index">
+        <div [formGroupName]="i" *ngIf="editingIndex !== i"
+             style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+
+          <div style="flex: 1; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px;">
+            <strong>{{ rule.value.rule }}</strong>
+            <span style="color: #4b5563;"> — {{ rule.value.points }} pts</span>
+          </div>
+
+          <button type="button"
+                  (click)="editScoringRule(i)"
+                  style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
+            ✎
+          </button>
+
+          <button type="button"
+                  (click)="removeScoringRule(i)"
+                  style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
+            ✕
+          </button>
+        </div>
+      </ng-container>
+
+      <div *ngIf="showScoringRuleForm"
+           [formGroup]="newRuleForm"
+           style="margin-bottom: 16px; border: 1px solid #ccc; border-radius: 8px; padding: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+      <textarea formControlName="rule" placeholder="Describe scoring rule" rows="2"
+                style="flex: 1; padding: 6px; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+
+          <input type="number" formControlName="points" placeholder="Points"
+                 style="width: 75px; padding: 6px; border-radius: 6px; border: 1px solid #ccc; text-align: center;">
+
+          <button *ngIf="editingIndex === null" type="button" (click)="addScoringRuleToList()"
+                  style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
+            Add
+          </button>
+
+          <button *ngIf="editingIndex !== null" type="button" (click)="saveEditedScoringRule()"
+                  style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
+            Save
+          </button>
+
+          <button type="button"
+                  (click)="cancelScoringForm()"
+                  style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <button *ngIf="!showScoringRuleForm"
+              type="button"
+              (click)="initNewRuleForm(); toggleScoringForm()"
+              style="display: block; margin-top: 8px; padding: 6px 12px; background-color: #4f46e5; color: white; border: none; border-radius: 6px; cursor: pointer;">
+        + Add Scoring Rule
+      </button>
+    </div>
+
+    <div formArrayName="players" style="margin-bottom: 24px;">
+      <label>Players:</label>
+
+      <div class="player-cards-container" style="display: flex; flex-wrap: wrap; gap: 25px; position: relative;">
+        <ng-container *ngFor="let player of players.controls; let i = index">
+          <div class="player-wrapper" style="position: relative;">
+            <app-player-card
+              [playerLastName]="player.get('lastName')?.value"
+              [playerImage]="player.get('image')?.value">
+            </app-player-card>
+
+            <i class="fas fa-edit player-edit" title="Edit" (click)="editPlayer(i)"></i>
+            <i class="fas fa-trash-alt player-delete" title="Delete" (click)="removePlayer(i)"></i>
+          </div>
+        </ng-container>
+      </div>
+
+      <div *ngIf="!showPlayerForm" style="margin: 8px 0 0 0;">
+        <button type="button" (click)="showPlayerForm = true"
+                style="padding: 8px 16px; background-color: #4f46e5; color: white; border: none; border-radius: 6px; cursor: pointer;">
+          + Add Player
+        </button>
+      </div>
+
+      <app-player-form
+        *ngIf="showPlayerForm"
+        [initialData]="playerBeingEdited"
+        (cancel)="showPlayerForm = false; playerBeingEdited = null;"
+        (add)="addPlayerToArray($event)"
+        (saveEdit)="saveEditedPlayer($event)">
+      </app-player-form>
+    </div>
+
+    <div style="text-align: center; margin-top: 24px;">
+      <button type="submit" [disabled]="fantasyForm.invalid"
+              style="padding: 10px 20px; background-color: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer;">
+        Create Fantasy Game
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,41 @@
+.player-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.player-edit,
+.player-delete {
+  position: absolute;
+  display: none;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 5;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.player-edit:hover {
+  color: #2563eb
+}
+
+.player-delete:hover {
+  color: #dc2626;
+}
+
+.player-edit {
+  top: 5px;
+  left: 5px;
+}
+
+.player-delete {
+  top: 5px;
+  right: 5px;
+}
+
+.player-wrapper:hover .player-edit,
+.player-wrapper:hover .player-delete {
+  display: block;
+}
