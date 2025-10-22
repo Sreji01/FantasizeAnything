@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { NgIf, NgForOf } from '@angular/common';
-import { PlayerFormComponent } from "../player-form/player-form.component";
-import { PlayerCardComponent } from "../player-card/player-card.component";
+import {Component} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
+import {NgIf, NgForOf} from '@angular/common';
+import {PlayerFormComponent} from "../player-form/player-form.component";
+import {PlayerCardComponent} from "../player-card/player-card.component";
+import {FantasyGameService} from "../../services/fantasy-game.service";
 
 @Component({
   selector: 'app-fantasy-game-form',
@@ -20,9 +21,9 @@ export class FantasyGameFormComponent {
   editPlayerIndex: number | null = null;
   playerBeingEdited: any = null;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private fantasyGameService: FantasyGameService) {
     this.fantasyForm = this.fb.group({
-      title: ['', Validators.required],
+      name: ['', Validators.required],
       description: ['', Validators.required],
       numberOfPlayersPerTeam: [''],
       budget: [''],
@@ -31,8 +32,8 @@ export class FantasyGameFormComponent {
     });
 
     this.newRuleForm = this.fb.group({
-      rule: [''],
-      points: ['']
+      description: [''],
+      numberOfPoints: ['']
     });
   }
 
@@ -55,11 +56,11 @@ export class FantasyGameFormComponent {
 
   addScoringRuleToList(): void {
     const ruleValue = this.newRuleForm.value;
-    if (!ruleValue?.rule || !ruleValue?.points) return;
+    if (!ruleValue?.description || !ruleValue?.numberOfPoints) return;
 
     const ruleGroup = this.fb.group({
-      rule: [ruleValue.rule],
-      points: [ruleValue.points]
+      description: [ruleValue.description],
+      numberOfPoints: [ruleValue.numberOfPoints]
     });
 
     this.scoringRules.push(ruleGroup);
@@ -76,7 +77,7 @@ export class FantasyGameFormComponent {
   saveEditedScoringRule(): void {
     if (this.editingIndex !== null) {
       const updatedValue = this.newRuleForm.value;
-      if (!updatedValue?.rule || !updatedValue?.points) return;
+      if (!updatedValue?.description || !updatedValue?.numberOfPoints) return;
 
       this.scoringRules.at(this.editingIndex).patchValue(updatedValue);
     }
@@ -118,6 +119,17 @@ export class FantasyGameFormComponent {
   }
 
   onSubmit(): void {
+    if (this.fantasyForm.invalid) return;
 
+    this.fantasyGameService.createFantasyGame(this.fantasyForm.value).subscribe({
+      next: (createdGame) => {
+        console.log('Created:', createdGame);
+        alert('Fantasy game has been successfully created.');
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        alert('An error occurred while creating the fantasy game. Please try again.');
+      }
+    });
   }
 }

@@ -24,6 +24,7 @@ export class PlayerFormComponent implements OnChanges {
     this.playerForm = this.fb.group({
       firstName: [''],
       lastName: [''],
+      birthDate: [''],
       price: [''],
       image: [''],
       characteristics: this.fb.array([])

@@ -6,10 +6,10 @@
 
     <div class="form-group" style="margin-bottom: 16px;">
       <label for="title">Title *</label>
-      <input type="text" id="title" formControlName="title" placeholder="Enter game title" required
+      <input type="text" id="title" formControlName="name" placeholder="Enter game title" required
              style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
-      <div *ngIf="fantasyForm.get('title')?.invalid && fantasyForm.get('title')?.touched"
-           style="color:red; font-size: 12px;">Title is required</div>
+      <div *ngIf="fantasyForm.get('name')?.invalid && fantasyForm.get('name')?.touched"
+           style="color:red; font-size: 12px;">Name is required</div>
     </div>
 
     <div class="form-group" style="margin-bottom: 16px;">
@@ -39,34 +39,30 @@
       <ng-container *ngFor="let rule of scoringRules.controls; let i = index">
         <div [formGroupName]="i" *ngIf="editingIndex !== i"
              style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-
           <div style="flex: 1; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px;">
-            <strong>{{ rule.value.rule }}</strong>
-            <span style="color: #4b5563;"> — {{ rule.value.points }} pts</span>
+            <strong>{{ rule.value.description }}</strong>
+            <span style="color: #4b5563;"> — {{ rule.value.numberOfPoints }} pts</span>
           </div>
 
-          <button type="button"
-                  (click)="editScoringRule(i)"
+          <button type="button" (click)="editScoringRule(i)"
                   style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
             ✎
           </button>
 
-          <button type="button"
-                  (click)="removeScoringRule(i)"
+          <button type="button" (click)="removeScoringRule(i)"
                   style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
             ✕
           </button>
         </div>
       </ng-container>
 
-      <div *ngIf="showScoringRuleForm"
-           [formGroup]="newRuleForm"
+      <div *ngIf="showScoringRuleForm" [formGroup]="newRuleForm"
            style="margin-bottom: 16px; border: 1px solid #ccc; border-radius: 8px; padding: 12px;">
         <div style="display: flex; align-items: center; gap: 8px;">
-      <textarea formControlName="rule" placeholder="Describe scoring rule" rows="2"
-                style="flex: 1; padding: 6px; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+          <textarea formControlName="description" placeholder="Describe scoring rule" rows="2"
+                    style="flex: 1; padding: 6px; border-radius: 6px; border: 1px solid #ccc;"></textarea>
 
-          <input type="number" formControlName="points" placeholder="Points"
+          <input type="number" formControlName="numberOfPoints" placeholder="Points"
                  style="width: 75px; padding: 6px; border-radius: 6px; border: 1px solid #ccc; text-align: center;">
 
           <button *ngIf="editingIndex === null" type="button" (click)="addScoringRuleToList()"
@@ -79,16 +75,14 @@
             Save
           </button>
 
-          <button type="button"
-                  (click)="cancelScoringForm()"
+          <button type="button" (click)="cancelScoringForm()"
                   style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 6px 10px; cursor: pointer;">
             ✕
           </button>
         </div>
       </div>
 
-      <button *ngIf="!showScoringRuleForm"
-              type="button"
+      <button *ngIf="!showScoringRuleForm" type="button"
               (click)="initNewRuleForm(); toggleScoringForm()"
               style="display: block; margin-top: 8px; padding: 6px 12px; background-color: #4f46e5; color: white; border: none; border-radius: 6px; cursor: pointer;">
         + Add Scoring Rule
