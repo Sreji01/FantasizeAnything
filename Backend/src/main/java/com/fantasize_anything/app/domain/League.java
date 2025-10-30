@@ -30,9 +30,6 @@ public class League {
     @JoinColumn(name = "user_id")
     private User creator;
 
-    @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Team> teams;
-
     @PrePersist
     public void prePersist(){
         dateCreated = LocalDate.now();

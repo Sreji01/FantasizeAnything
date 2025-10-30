@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "scoring_system")
+@Table(name = "scoring_rule")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,6 +18,7 @@ public class ScoringRule {
 
     private String description;
 
+    @Column(name = "number_of_points")
     private int numberOfPoints;
 
     @ManyToOne

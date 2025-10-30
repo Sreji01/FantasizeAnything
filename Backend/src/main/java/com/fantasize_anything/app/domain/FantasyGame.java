@@ -25,33 +25,45 @@ public class FantasyGame {
 
     private String title;
     private String description;
+
+    @Column(name = "date_created")
     private LocalDate dateCreated;
     private BigDecimal budget;
-    private int numberOfPlayers;
+
+    @Column(name = "number_of_players_per_team")
+    private int numberOfPlayersPerTeam;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User creator;
 
-    @OneToMany(mappedBy = "fantasyGame", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<League> leagues;
+    @OneToMany(mappedBy = "fantasyGame", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<League> leagues = new ArrayList<>();
 
-    @OneToMany(mappedBy = "fantasyGame", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Player> players;
+    @OneToMany(mappedBy = "fantasyGame", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Player> players = new ArrayList<>();
 
-    @OneToMany(mappedBy = "fantasyGame", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ScoringRule> scoringRules;
+    @OneToMany(mappedBy = "fantasyGame", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<ScoringRule> scoringRules = new ArrayList<>();
 
     @PrePersist
-    public void prePersist(){
+    public void prePersist() {
         dateCreated = LocalDate.now();
     }
 
-    public void addScoringRule(ScoringRule rule){
-        if(scoringRules == null){
-            scoringRules = new ArrayList<>();
-        }
-        rule.setFantasyGame(this);
-        scoringRules.add(rule);
+    public void addLeague(League league) {
+        leagues.add(league);
+        league.setFantasyGame(this);
     }
+
+    public void addPlayer(Player player) {
+        players.add(player);
+        player.setFantasyGame(this);
+    }
+
+    public void addScoringRule(ScoringRule rule) {
+        scoringRules.add(rule);
+        rule.setFantasyGame(this);
+    }
+
 }

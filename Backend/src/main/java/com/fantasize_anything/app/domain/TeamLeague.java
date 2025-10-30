@@ -4,22 +4,21 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Entity
-@Table(name = "team")
+@Table(name = "team_league")
 @Getter
 @Setter
-public class Team {
+public class TeamLeague {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private BigDecimal remainingBudget;
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User creator;
+    @JoinColumn(name = "league_id")
+    private League league;
 }

@@ -17,12 +17,13 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(name = "first_name")
+    private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "birth_day")
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
     private BigDecimal price;
